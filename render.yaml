@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: farmly
+    runtime: python
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate
+    startCommand: gunicorn --bind 0.0.0.0:$PORT farmly_project.wsgi:application
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.3
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: farmly.onrender.com
